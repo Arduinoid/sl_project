@@ -16,10 +16,10 @@ abstract class ControllerBase
 
     public function __construct(Request $request, Response $response, $args)
     {
-        // var_dump($request);
         $this->request = $request;
         $this->response = $response;
         $this->args = $args;
+        session_start();
     }
 
     abstract public function defaultAction();

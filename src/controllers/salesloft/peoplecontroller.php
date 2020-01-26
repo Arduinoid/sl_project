@@ -22,7 +22,7 @@ class PeopleController extends ControllerBase
         $context = new stdClass();
         $config = \Config::load(CONFIGPATH);
         $http = new \Http();
-        $people = new People($http, $config);
+        $people = new People($http, $config, $_SESSION);
         $context->people = $people->getAll();
         $output = $this->loadView('people', $context);
         return $this->writeBody($output);
@@ -30,11 +30,19 @@ class PeopleController extends ControllerBase
 
     public function frequencyAction()
     {
-        $context = new stdClass();
         $config = \Config::load(CONFIGPATH);
         $http = new \Http();
-        $people = new People($http, $config);
+        $people = new People($http, $config, $_SESSION);
         $output = json_encode($people->frequency());
+        return $this->writeBody($output);
+    }
+
+    public function duplicatesAction()
+    {
+        $config = \Config::load(CONFIGPATH);
+        $http = new \Http();
+        $people = new People($http, $config, $_SESSION);
+        $output = json_encode($people->getPossibleDuplicates());
         return $this->writeBody($output);
     }
 
