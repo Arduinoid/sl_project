@@ -18,7 +18,6 @@ class People
     public function getAll()
     {
         $this->peopleData = json_decode($this->http->request('GET', "{$this->endpoint}?per_page=100", $this->secret, []))->data;
-        return $this->peopleData;
     }
 
     public function frequency()
@@ -60,7 +59,7 @@ class People
                 $domainB = $partsB[1];
                 
                 // if we are on the same persons email or the domains don't match, move on to the next email
-                if ($outerIndex === $innerIndex || $domainA !== $domainB) continue;
+                if ($outerIndex === $innerIndex || $domainA !== $domainB || $person->id === $other->id) continue;
                 
                 // turn the string into an array to diff between
                 $toBeCompared = str_split($aliasB);
@@ -71,12 +70,17 @@ class People
                 $diffCount = count($diff);
 
                 // if the counts are under the threshold then add the email to the list of possible duplicates
-                if ($diffCount <= 4 && $lengthDiff <= 4) {
-                    $result[$other->id] = $other->email_address;
+                if ($diffCount <= 4 && $lengthDiff <= 2) {
+                    $this->peopleData[$outerIndex]->isDuplicate = true;
                 }
             }
         }
-        return $result;
+        return $this->peopleData;
+    }
+
+    public function getPeople()
+    {
+        return $this->peopleData;
     }
 
     private function filterSpecialCharacters($array)

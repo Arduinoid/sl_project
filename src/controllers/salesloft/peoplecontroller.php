@@ -12,7 +12,13 @@ class PeopleController extends ControllerBase
     public function defaultAction()
     {
         $context = new stdClass();
-        $context->message = 'People end point!';
+        $context->message = 'SalesLoft Project';
+        $context->links = [
+            [
+                'text' => 'People',
+                'href' => '/people'
+            ]
+        ];
         $output = $this->loadView('default', $context);
         return $this->writeBody($output);
     }
@@ -20,9 +26,7 @@ class PeopleController extends ControllerBase
     public function getAction()
     {
         $context = new stdClass();
-        $config = \Config::load(CONFIGPATH);
-        $http = new \Http();
-        $people = new People($http, $config, $_SESSION);
+        $people = $this->getPeopleModel();
         $context->people = $people->getAll();
         $output = $this->loadView('people', $context);
         return $this->writeBody($output);
@@ -30,19 +34,22 @@ class PeopleController extends ControllerBase
 
     public function frequencyAction()
     {
-        $config = \Config::load(CONFIGPATH);
-        $http = new \Http();
-        $people = new People($http, $config, $_SESSION);
+        $people = $this->getPeopleModel();
         $output = json_encode($people->frequency());
         return $this->writeBody($output);
     }
 
     public function duplicatesAction()
     {
-        $config = \Config::load(CONFIGPATH);
-        $http = new \Http();
-        $people = new People($http, $config, $_SESSION);
+        $people = $this->getPeopleModel();
         $output = json_encode($people->getPossibleDuplicates());
+        return $this->writeBody($output);
+    }
+
+    public function getPeopleAction()
+    {
+        $people = $this->getPeopleModel();
+        $output = json_encode($people->getPeople());
         return $this->writeBody($output);
     }
 
@@ -75,5 +82,17 @@ class PeopleController extends ControllerBase
             $output = ob_get_clean();
             return $output;
         }
+    }
+
+    /**
+     * this acts as a simple DI function for getting a fully hydrated model
+     * 
+     * @return Models\SalesLoft\People
+     */
+    private function getPeopleModel()
+    {
+        $config = \Config::load(CONFIGPATH);
+        $http = new \Http();
+        return new People($http, $config, $_SESSION);
     }
 }
