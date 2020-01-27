@@ -3,7 +3,6 @@
 namespace Controllers\SalesLoft;
 
 use Controllers\ControllerBase;
-use Exception;
 use Models\SalesLoft\People;
 use stdClass;
 
