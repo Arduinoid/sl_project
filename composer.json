@@ -13,7 +13,7 @@
     "scripts": {
         "run-server": [
             "Composer\\Config::disableProcessTimeout",
-            "php -S localhost:9000 -t ./public"
+            "php -S localhost:3000 -t ./public"
         ]
     }
 }

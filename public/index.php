@@ -1,6 +1,7 @@
 <?php
 
 use Slim\Factory\AppFactory;
+use Slim\Routing\RouteCollectorProxy;
 use Controllers\HandlerFactory;
 use Controllers\SalesLoft\PeopleController;
 
@@ -14,9 +15,12 @@ $app = AppFactory::create();
  * ===============================
  */
 $app->get('/', HandlerFactory::create(PeopleController::class));
-$app->get('/people', HandlerFactory::create(PeopleController::class, 'get'));
-$app->get('/frequency', HandlerFactory::create(PeopleController::class, 'frequency'));
-$app->get('/duplicates', HandlerFactory::create(PeopleController::class, 'duplicates'));
+$app->group('/people', function(RouteCollectorProxy $group) {
+    $group->get('', HandlerFactory::create(PeopleController::class, 'get'));
+    $group->get('/frequency', HandlerFactory::create(PeopleController::class, 'frequency'));
+    $group->get('/duplicates', HandlerFactory::create(PeopleController::class, 'duplicates'));
+    $group->get('/get', HandlerFactory::create(PeopleController::class, 'getPeople'));
+});
 
 /**
  * ===================
