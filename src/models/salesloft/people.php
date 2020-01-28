@@ -16,19 +16,30 @@ class People
         $this->peopleData = $this->peopleData ?? [];
     }
 
+    /**
+     * this method does the initial api call and caches the response data
+     */
     public function getAll()
     {
         try {
             $response = $this->http->request('GET', "{$this->endpoint}?per_page=100", $this->secret, []);
             if ($response->code === 200 && !empty($response->body)) {
                 $this->peopleData = json_decode($response->body)->data;
+                return true;
             }
         }
         catch (\Exception $e) {
             error_log("Could not retrieve people data from api [MESSAGE] {$e->getMessage()}");
+            return false;
         }
     }
 
+    /**
+     * calculates the total count of characters that appear in all of the emails
+     * contained in the peopleData property
+     * 
+     * @return array
+     */
     public function frequency()
     {
         $histogram = [];
@@ -51,6 +62,13 @@ class People
         return $result;
     }
 
+    /**
+     * flags any people in the list of peopleData who have an email
+     * that may be closely related by setting an "isDuplicate" property
+     * in the list data
+     * 
+     * @return array
+     */
     public function getPossibleDuplicates()
     {
         $result = [];
@@ -87,11 +105,23 @@ class People
         return $this->peopleData;
     }
 
+    /**
+     * simple getter for returning the list of people data
+     * 
+     * @return array
+     */
     public function getPeople()
     {
         return $this->peopleData;
     }
 
+    /**
+     * returns an array of only alphabetical characters
+     * 
+     * @param array $array
+     * 
+     * @return array
+     */
     private function filterSpecialCharacters($array)
     {
         return array_filter($array, function($item) {
