@@ -8,16 +8,25 @@ class People
     private $endpoint = 'https://api.salesloft.com/v2/people.json';
     private $secret;
 
-    public function __construct($http, $config, &$session)
+    public function __construct($http, $secret, &$cache)
     {
         $this->http = $http;
-        $this->secret = $config->configData->api_secret;
-        $this->peopleData = &$session['cache'];
+        $this->secret = $secret;
+        $this->peopleData = &$cache;
+        $this->peopleData = $this->peopleData ?? [];
     }
 
     public function getAll()
     {
-        $this->peopleData = json_decode($this->http->request('GET', "{$this->endpoint}?per_page=100", $this->secret, []))->data;
+        try {
+            $response = $this->http->request('GET', "{$this->endpoint}?per_page=100", $this->secret, []);
+            if ($response->code === 200 && !empty($response->body)) {
+                $this->peopleData = json_decode($response->body)->data;
+            }
+        }
+        catch (\Exception $e) {
+            error_log("Could not retrieve people data from api [MESSAGE] {$e->getMessage()}");
+        }
     }
 
     public function frequency()

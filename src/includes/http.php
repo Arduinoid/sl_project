@@ -13,13 +13,18 @@ class Http
             ]
         ]);
         $response = curl_exec($cnt);
-        $info = curl_getinfo($cnt);
+        $httpCode = curl_getinfo($cnt, CURLINFO_RESPONSE_CODE);
+        $error = curl_error($cnt);
+        curl_close($cnt);
 
-        if ($response === false) {
-            return curl_error($cnt);
+        if ($response !== false && empty($error)) {
+            return (object)[
+                'body' => $response,
+                'code' => $httpCode
+            ];
         }
         else {
-            return $response;
+            throw new Exception("Could not make curl request to {$url} [ERROR] {$error}");
         }
     }
 }

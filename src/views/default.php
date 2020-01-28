@@ -5,4 +5,5 @@
             <a href=<?= $link['href'] ?>><?= $link['text'] ?></a>
         <?php } ?>
     </div>
+    <button @click='destroyCache' class='button'>Destroy Cache</button>
 </div>

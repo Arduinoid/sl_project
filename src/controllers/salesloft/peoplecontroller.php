@@ -38,6 +38,12 @@ class PeopleController extends ControllerBase
         return $this->writeBody($output);
     }
 
+    public function destroyCacheAction()
+    {
+        session_destroy();
+        return $this->response;
+    }
+
     /**
      * this acts as a simple DI function for getting a fully hydrated model
      * 
@@ -47,6 +53,6 @@ class PeopleController extends ControllerBase
     {
         $config = \Config::load(CONFIGPATH);
         $http = new \Http();
-        return new People($http, $config, $_SESSION);
+        return new People($http, $config->configData->api_secret, $_SESSION['cache']);
     }
 }

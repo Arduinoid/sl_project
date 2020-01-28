@@ -25,6 +25,7 @@ $app->group('/people', function(RouteCollectorProxy $group) {
     $group->get('/frequency', HandlerFactory::create(PeopleController::class, 'frequency'));
     $group->get('/duplicates', HandlerFactory::create(PeopleController::class, 'duplicates'));
     $group->get('/get', HandlerFactory::create(PeopleController::class, 'getPeople'));
+    $group->get('/destroy_cache', HandlerFactory::create(PeopleController::class, 'destroyCache'));
 });
 
 /**

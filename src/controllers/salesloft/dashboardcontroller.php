@@ -12,10 +12,7 @@ class DashBoardController extends ControllerBase
         $context = new stdClass();
         $context->message = 'SalesLoft Project';
         $context->links = [
-            [
-                'text' => 'People',
-                'href' => '/people'
-            ]
+            ['text' => 'People', 'href' => '/people']
         ];
         $output = $this->loadView('default', $context);
         return $this->writeBody($output);

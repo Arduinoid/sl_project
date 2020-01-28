@@ -10,6 +10,7 @@
             methods: {
                 getLetterFrequency,
                 getPossibleDuplicates,
+                destroyCache,
             }
         })
         getPeople(app.$data);
@@ -41,6 +42,15 @@
         axios.get('people/get')
         .then(function(res) {
             data.people = res.data;
+            console.log(res);
+        }, function(err) {
+            console.log(err);
+        });
+    }
+
+    function destroyCache() {
+        axios.get('people/destroy_cache')
+        .then(function(res) {
             console.log(res);
         }, function(err) {
             console.log(err);
