@@ -8,7 +8,7 @@
 ## Setup
 
 - run `composer install` in the project root
-- make a *config.json* file containing the items found in the example config file. Replace the values with actual values
+- make a *config.json* file in the project root containing the items found in the example config file. Replace the values with actual values
 - to start the app run `php -S localhost:3000 -t ./public` in the project root
 
 ## Testing
