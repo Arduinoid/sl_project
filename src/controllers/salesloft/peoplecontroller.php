@@ -12,6 +12,11 @@ class PeopleController extends ControllerBase
     {
         $context = new stdClass();
         $people = $this->getPeopleModel();
+        if (is_null($people)) {
+            $context->errorMessage = 'We\'re having trouble get your data at this time. Please try again later';
+            $output = $this->loadView('error', $context);
+            return $this->writeBody($output);
+        }
         $context->people = $people->getAll();
         $output = $this->loadView('people', $context);
         return $this->writeBody($output);
@@ -51,8 +56,13 @@ class PeopleController extends ControllerBase
      */
     private function getPeopleModel()
     {
-        $config = \Config::load(CONFIGPATH);
-        $http = new \Http();
-        return new People($http, $config->configData->api_secret, $_SESSION['cache']);
+        try {
+            $config = \Config::load(CONFIGPATH);
+            $http = new \Http();
+            return new People($http, $config->configData->api_secret, $_SESSION['cache']);
+        }
+        catch (\Exception $e) {
+            return null;
+        }
     }
 }

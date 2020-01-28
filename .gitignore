@@ -1,3 +1,4 @@
 vendor
 \.vscode
 resources
+config.json
