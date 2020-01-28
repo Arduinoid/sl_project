@@ -17,7 +17,7 @@
     <title><?= $pageTitle ?? 'People' ?></title>
 </head>
 <body>
-    <div id="app">
+    <div id="app" class='container'>
         <?= $_view ?>
     </div>
 </body>

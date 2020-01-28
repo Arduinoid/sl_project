@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for='person in people' :class='{ highlight: person.isDuplicate}'>
+            <tr v-for='(person, index) in people' :class='{ highlight: person.isDuplicate, grey: index % 2 !== 0 }'>
                 <td>{{ person.display_name }}</td>
                 <td>{{ person.email_address }}</td>
                 <td>{{ person.title }}</td>
@@ -31,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for='letter in letters'>
+                <tr v-for='(letter, index) in letters' :class='{ grey: index % 2 !== 0 }'>
                     <td>{{ Object.keys(letter)[0] }}</td>
                     <td>{{ letter[Object.keys(letter)[0]] }}</td>
                 </tr>

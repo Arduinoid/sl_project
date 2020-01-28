@@ -1,3 +1,13 @@
+
+.grey {
+    background-color: #f1f1f1;
+}
+
 .highlight {
-    background-color: #ccc;
+    background-color: #a1d5ff;
+    color: white;
+}
+thead {
+    background-color: #299eff;
+    color: white;
 }

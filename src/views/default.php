@@ -1,4 +1,4 @@
-<div class="container">
+<div>
     <h1 class='hero'><?= $message ?></h1>
     <div class="navbar">
         <?php foreach($links as $link) { ?>
