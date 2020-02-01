@@ -5,36 +5,68 @@
             el: '#app',
             data: {
                 letters: [],
-                people: []
+                people: [],
+                duplicatesCalculated: false,
+                frequencyCalculated: false,
+                showDuplicate: false,
+                showLetters: false,
+                showModal: false,
+                modal: {
+                    messages: [
+                        'Hello',
+                        "I'm a Modal!"
+                    ]
+                }
             },
             methods: {
                 getLetterFrequency,
-                getPossibleDuplicates,
                 destroyCache,
+                toggleDuplicates,
+                toggleLetterFrequency
             }
         })
         getPeople(app.$data);
     });
     
-    function getLetterFrequency() {
-        var vm = this;
-        axios.get('people/frequency')
-        .then(function(res) {
-            vm.letters = res.data;
-            console.log(res);
-        }, function(err) {
-            console.log(err);
-        });
+    async function getLetterFrequency(vm) {
+        try {
+            var result = await axios.get('people/frequency');
+            vm.frequencyCalculated = true;
+            vm.letters = result.data;  
+        }
+        catch (e) {
+            vm.modal.messages = [
+                'Sorry, we can not calculate letter frequency at this time.',
+                'We are experiencing an error'
+            ];
+            vm.showModal = true;
+        }
+        // axios.get('people/frequency')
+        // .then(function(res) {
+        //     vm.frequencyCalculated = true;
+        //     vm.letters = res.data;
+        // })
+        // .catch(function(err) {
+        //     vm.modal.messages = [
+        //         'Sorry, we can not calculate letter frequency at this time.',
+        //         'We are experiencing an error'
+        //     ];
+        //     vm.showModal = true;
+        // });
     }
 
-    function getPossibleDuplicates() {
-        var vm = this;
+    function getPossibleDuplicates(vm) {
         axios.get('people/duplicates')
         .then(function(res) {
-            console.log(res);
+            vm.duplicatesCalculated = true;
             vm.people = res.data;
-        }, function(err) {
-            console.log(err);
+        })
+        .catch(function(err) {
+            vm.modal.messages = [
+                'Sorry, we can not get duplicates at this time.',
+                'We are experiencing an error'
+            ];
+            vm.showModal = true;
         });
     }
 
@@ -42,19 +74,35 @@
         axios.get('people/get')
         .then(function(res) {
             data.people = res.data;
-            console.log(res);
-        }, function(err) {
-            console.log(err);
         });
     }
 
     function destroyCache() {
         axios.get('people/destroy_cache')
         .then(function(res) {
-            console.log(res);
-        }, function(err) {
-            console.log(err);
+            alert('Cache has been deleted');
         });
+    }
+
+    function toggleDuplicates() {
+        var vm = this;
+        
+        if (!vm.duplicatesCalculated) {
+            getPossibleDuplicates(vm);
+        }
+        vm.showDuplicate = !vm.showDuplicate;
+    }
+
+    async function toggleLetterFrequency() {
+        var vm = this;
+
+        if (!vm.frequencyCalculated) {
+            await getLetterFrequency(vm);
+        }
+
+        if (vm.letters.length !== 0) {
+            vm.showLetters = !vm.showLetters;
+        }
     }
 
 })();

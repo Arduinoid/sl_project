@@ -1,4 +1,4 @@
-<button @click='getPossibleDuplicates' class='button'>Show Possible Duplicates</button>
+<button @click='toggleDuplicates' class='button'>Show Possible Duplicates</button>
 <div class="columns">
     <div class="column is-three-quarters">
         <table v-if='people.length != 0'>
@@ -10,7 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for='(person, index) in people' :class='{ highlight: person.isDuplicate, grey: index % 2 !== 0 }'>
+            <tr v-for='(person, index) in people' :class='{ highlight: (showDuplicate && person.isDuplicate), grey: index % 2 !== 0 }'>
                 <td>{{ person.display_name }}</td>
                 <td>{{ person.email_address }}</td>
                 <td>{{ person.title }}</td>
@@ -22,8 +22,8 @@
         </div>
     </div>
     <div class="column">
-        <button @click='getLetterFrequency' class='button'>Get Letter Frequency</button>
-        <table v-if='letters.length != 0'>
+        <button @click='toggleLetterFrequency' class='button'>Get Letter Frequency</button>
+        <table v-if='letters.length != 0 && showLetters'>
             <thead>
                 <tr>
                     <td>Letter</td>
@@ -37,5 +37,13 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+<div id="modal" v-if='showModal'>
+    <div class="box">
+        <div class="modal-message" v-for='message in modal.messages'>{{ message }}</div>
+        <div class="actions">
+            <button @click='showModal=false' class='button'>OK</button>
+        </div>
     </div>
 </div>
