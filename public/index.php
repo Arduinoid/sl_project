@@ -5,6 +5,7 @@ use Slim\Routing\RouteCollectorProxy;
 use Controllers\HandlerFactory;
 use Controllers\SalesLoft\DashBoardController;
 use Controllers\SalesLoft\PeopleController;
+use Controllers\MusicController;
 
 require __DIR__ . '/../bootstrap.php';
 
@@ -26,6 +27,11 @@ $app->group('/people', function(RouteCollectorProxy $group) {
     $group->get('/duplicates', HandlerFactory::create(PeopleController::class, 'duplicates'));
     $group->get('/get', HandlerFactory::create(PeopleController::class, 'getPeople'));
     $group->get('/destroy_cache', HandlerFactory::create(PeopleController::class, 'destroyCache'));
+});
+
+// Spotify routes
+$app->group('/music', function(RouteCollectorProxy $group) {
+    $group->get('', HandlerFactory::create(MusicController::class));
 });
 
 /**
