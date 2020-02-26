@@ -25,7 +25,7 @@
                 toggleLetterFrequency
             }
         })
-        getPeople(app.$data);
+        // getPeople(app.$data);
     });
     
     async function getLetterFrequency(vm) {
